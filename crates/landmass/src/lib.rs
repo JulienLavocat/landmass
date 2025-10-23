@@ -267,7 +267,7 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
     )
   }
 
-  pub fn update(&mut self, delta_time: f32) {
+  pub fn update(&mut self, rng: &mut impl rand::Rng, delta_time: f32) {
     self.pathing_results.clear();
 
     // TODO: make the edge_link_distance configurable.
@@ -523,7 +523,7 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
     }
 
     apply_avoidance_to_agents(
-      &mut rand::thread_rng(),
+      rng,
       &mut self.agents,
       &agent_id_to_agent_node,
       &self.characters,
