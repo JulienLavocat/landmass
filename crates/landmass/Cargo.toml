@@ -14,13 +14,14 @@ categories = ["game-development"]
 keywords = ["navigation", "system", "pathfinding", "avoidance"]
 
 [dependencies]
-dodgy_2d = "0.5.4"
+dodgy_2d = { path = "../../../dodgy/crates/dodgy_2d" }
 glam = "0.30.5"
 kdtree = "0.7.0"
 geo = "0.31.0"
 disjoint = "0.8.0"
 slotmap = "1.0.7"
 thiserror = "2.0"
+rand = "0.8.5"
 
 [dev-dependencies]
 googletest = "0.14.2"

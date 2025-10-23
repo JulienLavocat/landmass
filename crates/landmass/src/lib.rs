@@ -523,6 +523,7 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
     }
 
     apply_avoidance_to_agents(
+      &mut rand::thread_rng(),
       &mut self.agents,
       &agent_id_to_agent_node,
       &self.characters,

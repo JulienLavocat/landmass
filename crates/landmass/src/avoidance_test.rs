@@ -461,6 +461,7 @@ fn applies_no_avoidance_for_far_agents() {
   // `agent_3` is not on a node.
 
   apply_avoidance_to_agents(
+    &mut rand::thread_rng(),
     &mut agents,
     &agent_id_to_agent_node,
     /* characters= */ &HopSlotMap::with_key(),
@@ -550,6 +551,7 @@ fn applies_avoidance_for_two_agents() {
   );
 
   apply_avoidance_to_agents(
+    &mut rand::thread_rng(),
     &mut agents,
     &agent_id_to_agent_node,
     /* characters= */ &HopSlotMap::with_key(),
@@ -636,6 +638,7 @@ fn agent_avoids_character() {
     .insert(character, characters.get(character).unwrap().position);
 
   apply_avoidance_to_agents(
+    &mut rand::thread_rng(),
     &mut agents,
     &agent_id_to_agent_node,
     &characters,
@@ -709,6 +712,7 @@ fn agent_speeds_up_to_avoid_character() {
   );
 
   apply_avoidance_to_agents(
+    &mut rand::thread_rng(),
     &mut agents,
     &agent_id_to_agent_node,
     &HopSlotMap::with_key(),
@@ -739,6 +743,7 @@ fn agent_speeds_up_to_avoid_character() {
     .insert(character, characters.get(character).unwrap().position.extend(0.0));
 
   apply_avoidance_to_agents(
+    &mut rand::thread_rng(),
     &mut agents,
     &agent_id_to_agent_node,
     &characters,

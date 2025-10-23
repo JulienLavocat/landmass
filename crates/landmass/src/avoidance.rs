@@ -14,6 +14,7 @@ use crate::{
 /// Adjusts the velocity of `agents` to apply local avoidance. `delta_time` must
 /// be positive.
 pub(crate) fn apply_avoidance_to_agents<CS: CoordinateSystem>(
+  rng: &mut impl rand::Rng,
   agents: &mut HopSlotMap<AgentId, Agent<CS>>,
   agent_id_to_agent_node: &HashMap<AgentId, (Vec3, NodeRef)>,
   characters: &HopSlotMap<CharacterId, Character<CS>>,
@@ -151,6 +152,7 @@ pub(crate) fn apply_avoidance_to_agents<CS: CoordinateSystem>(
     let dodgy_agent = agent_id_to_dodgy_agent.get(&agent_id).unwrap();
     #[cfg(not(feature = "debug-avoidance"))]
     let desired_move = dodgy_agent.compute_avoiding_velocity(
+      rng,
       &nearby_agents,
       &nearby_obstacles,
       preferred_velocity,
@@ -162,6 +164,7 @@ pub(crate) fn apply_avoidance_to_agents<CS: CoordinateSystem>(
     let desired_move = {
       let (desired_move, debug_data) = dodgy_agent
         .compute_avoiding_velocity_with_debug(
+          rng,
           &nearby_agents,
           &nearby_obstacles,
           preferred_velocity,
