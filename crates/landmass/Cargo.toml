@@ -14,7 +14,7 @@ categories = ["game-development"]
 keywords = ["navigation", "system", "pathfinding", "avoidance"]
 
 [dependencies]
-dodgy_2d = { path = "../../../dodgy/crates/dodgy_2d" }
+dodgy_2d = { git = "https://github.com/JulienLavocat/dodgy", branch = "main" }
 glam = "0.30.5"
 kdtree = "0.7.0"
 geo = "0.31.0"
