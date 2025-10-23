@@ -359,7 +359,7 @@ fn find_path_across_connected_islands() {
     Arc::clone(&nav_mesh),
   ));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let off_mesh_links = archipelago
     .nav_data
@@ -475,7 +475,7 @@ fn finds_path_across_different_islands() {
     nav_mesh_2,
   ));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let off_mesh_links = archipelago
     .nav_data
@@ -556,7 +556,7 @@ fn aborts_early_for_unconnected_regions() {
     nav_mesh.clone(),
   ));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   // Verify that with island_id_3, the islands are connected.
   assert!(
@@ -573,7 +573,7 @@ fn aborts_early_for_unconnected_regions() {
 
   // Remove island_id_3 which will disconnect the other two islands.
   archipelago.remove_island(island_id_3);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let (_, _, path_result) = find_path_between_nodes(
     &archipelago.nav_data,
@@ -736,7 +736,7 @@ fn detour_for_high_cost_path_across_boundary_links() {
   let island_id_2 =
     archipelago.add_island(Island::new(Transform::default(), nav_mesh_2));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let (start_point, end_point, path_result) = find_path_between_nodes(
     &archipelago.nav_data,
@@ -1241,7 +1241,7 @@ fn animation_link_is_used() {
     kind: 0,
     bidirectional: false,
   });
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let off_mesh_link = off_mesh_link_for_animation_link(&archipelago, link_id);
 
@@ -1345,7 +1345,7 @@ fn animation_link_is_used_if_cheaper() {
     cost: 1.5,
     bidirectional: false,
   });
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let start_point = Vec3::new(2.5, 0.5, 0.0) + Vec3::new(10.0, 10.0, 0.0);
   let end_point = Vec3::new(0.5, 2.5, 0.0) + Vec3::new(10.0, 10.0, 0.0);
@@ -1382,7 +1382,7 @@ fn animation_link_is_used_if_cheaper() {
     cost: 0.75,
     bidirectional: false,
   });
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let off_mesh_link = off_mesh_link_for_animation_link(&archipelago, link_id);
 
@@ -1479,7 +1479,7 @@ fn animation_link_is_not_used_if_not_permitted() {
     kind: 0,
     bidirectional: false,
   });
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let start_point = Vec3::new(0.5, 0.5, 0.0) + Vec3::new(10.0, 10.0, 0.0);
   let end_point = Vec3::new(0.5, 2.5, 0.0) + Vec3::new(10.0, 10.0, 0.0);

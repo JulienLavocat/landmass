@@ -272,7 +272,7 @@ fn computes_and_follows_path() {
     Vec3::ZERO
   );
 
-  archipelago.update(/* delta_time= */ 0.01);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 0.01);
 
   // These agents found a path and started following it.
   assert_eq!(
@@ -329,7 +329,7 @@ fn computes_and_follows_path() {
   // Move agent_1 forward.
   archipelago.get_agent_mut(agent_1).unwrap().position =
     Vec3::new(2.5, 1.5, 1.0);
-  archipelago.update(/* delta_time= */ 0.01);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 0.01);
 
   assert!(
     archipelago
@@ -379,7 +379,7 @@ fn computes_and_follows_path() {
     Vec3::new(3.4, 3.4, 1.0);
   archipelago.get_agent_mut(agent_2).unwrap().position =
     Vec3::new(3.5, 2.5, 1.0);
-  archipelago.update(/* delta_time= */ 0.01);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 0.01);
 
   assert_eq!(
     archipelago.get_agent(agent_1).unwrap().state(),
@@ -460,7 +460,7 @@ fn agent_speeds_up_to_avoid_character() {
     agent
   });
 
-  archipelago.update(0.01);
+  archipelago.update(&mut rand::thread_rng(),0.01);
   // The agent will move at its desired speed normally.
   assert_eq!(
     *archipelago.get_agent(agent_id).unwrap().get_desired_velocity(),
@@ -473,7 +473,7 @@ fn agent_speeds_up_to_avoid_character() {
     radius: 0.5,
   });
 
-  archipelago.update(0.01);
+  archipelago.update(&mut rand::thread_rng(),0.01);
 
   let agent_desired_velocity =
     *archipelago.get_agent(agent_id).unwrap().get_desired_velocity();
@@ -546,7 +546,7 @@ fn changed_island_is_not_dirty_after_update() {
 
   assert!(archipelago.get_island(island_id).unwrap().dirty);
 
-  archipelago.update(/* delta_time= */ 0.01);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 0.01);
   assert!(!archipelago.get_island(island_id).unwrap().dirty);
 
   // Change the island (even though there isn't really a change).
@@ -557,7 +557,7 @@ fn changed_island_is_not_dirty_after_update() {
 
   assert!(archipelago.get_island(island_id).unwrap().dirty);
 
-  archipelago.update(/* delta_time= */ 0.01);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 0.01);
 
   assert!(!archipelago.get_island(island_id).unwrap().dirty);
 }
@@ -592,7 +592,7 @@ fn samples_point() {
     Transform { translation: offset, rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   assert_eq!(
     archipelago
@@ -643,7 +643,7 @@ fn finds_path() {
     Transform { translation: offset + Vec2::new(2.0, 0.5), rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = archipelago
     .sample_point(offset + Vec2::new(0.5, 0.5), &1e-5)
@@ -734,7 +734,7 @@ fn agent_overrides_node_costs() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The agent **could** go directly up, but due to its overridden node cost, it
   // is better to take the detour to the right.
@@ -806,7 +806,7 @@ fn paused_agent_does_not_repath() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
   expect_that!(
@@ -822,7 +822,7 @@ fn paused_agent_does_not_repath() {
   agent_mut.position = Vec2::new(0.5, 1.5);
   agent_mut.current_target = Some(Vec2::new(0.5, 2.5));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path has not changed.
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
@@ -839,7 +839,7 @@ fn paused_agent_does_not_repath() {
   agent_mut.position = Vec2::new(3.5, 1.5);
   agent_mut.current_target = Some(Vec2::new(3.5, 2.5));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path has not changed.
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
@@ -856,7 +856,7 @@ fn paused_agent_does_not_repath() {
   agent_mut.current_target = Some(Vec2::new(0.5, 1.5));
   agent_mut.paused = false;
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path has not changed.
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
@@ -874,7 +874,7 @@ fn paused_agent_does_not_repath() {
   agent_mut.current_target = Some(Vec2::new(0.5, 2.5));
   agent_mut.paused = true;
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path has not changed.
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
@@ -890,7 +890,7 @@ fn paused_agent_does_not_repath() {
   // Unpause the agent.
   agent_mut.paused = false;
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path has finally changed!
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
@@ -928,7 +928,7 @@ fn paused_agent_path_is_removed_when_invalid() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent_mut = archipelago.get_agent_mut(agent).unwrap();
   expect_that!(
@@ -944,7 +944,7 @@ fn paused_agent_path_is_removed_when_invalid() {
   agent_mut.paused = true;
   agent_mut.position = Vec2::new(1.5, 0.5);
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   // The path didn't change.
   let agent_ref = archipelago.get_agent_mut(agent).unwrap();
@@ -960,7 +960,7 @@ fn paused_agent_path_is_removed_when_invalid() {
   // Despite the agent still being paused, making the path invalid should remove
   // the path.
   archipelago.remove_island(island_2);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent_ref = archipelago.get_agent(agent).unwrap();
   expect_that!(agent_ref.current_path, none());
@@ -1058,7 +1058,7 @@ fn agent_can_use_animation_link() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_eq!(agent.state(), AgentState::Moving);
@@ -1071,7 +1071,7 @@ fn agent_can_use_animation_link() {
 
   // Move the agent forward.
   agent.position = Vec2::new(1.25, 0.75);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_eq!(agent.state(), AgentState::Moving);
@@ -1081,7 +1081,7 @@ fn agent_can_use_animation_link() {
 
   // Move the agent to be touching the animation link.
   agent.position = Vec2::new(1.25, 1.5);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_eq!(agent.state(), AgentState::ReachedAnimationLink);
@@ -1100,7 +1100,7 @@ fn agent_can_use_animation_link() {
 
   // Pretend the agent does some random stuff. Nothing should get out of sync.
   agent.position = Vec2::new(100.0, 200.0);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_eq!(agent.state(), AgentState::UsingAnimationLink);
@@ -1110,7 +1110,7 @@ fn agent_can_use_animation_link() {
   expect_that!(agent.end_animation_link(), ok(()));
   // We ended at a different point than expected, but that's ok.
   agent.position = Vec2::new(1.75, 3.1);
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_eq!(agent.state(), AgentState::Moving);
@@ -1156,7 +1156,7 @@ fn agent_path_cleared_when_clearing_target() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_true!(agent.current_path.is_some());
@@ -1164,7 +1164,7 @@ fn agent_path_cleared_when_clearing_target() {
 
   agent.current_target = None;
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_true!(agent.current_path.is_none());
@@ -1185,7 +1185,7 @@ fn agent_path_cleared_on_bad_target() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_true!(agent.current_path.is_some());
@@ -1195,7 +1195,7 @@ fn agent_path_cleared_on_bad_target() {
   // appropriate state set.
   agent.current_target = Some(Vec2::new(1.5, 1.5));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_true!(agent.current_path.is_none());
@@ -1221,7 +1221,7 @@ fn agent_could_not_find_path() {
     agent
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let agent = archipelago.get_agent_mut(agent_id).unwrap();
   expect_true!(agent.current_path.is_none());

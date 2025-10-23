@@ -109,7 +109,7 @@ let agent_2 = archipelago.add_agent({
 
 for i in 0..300 {
   let delta_time = 1.0 / 10.0;
-  archipelago.update(delta_time);
+  archipelago.update(&mut rand::thread_rng(), delta_time);
 
   for agent_id in archipelago.get_agent_ids().collect::<Vec<_>>() {
     let agent = archipelago.get_agent_mut(agent_id).unwrap();

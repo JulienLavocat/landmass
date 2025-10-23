@@ -24,6 +24,7 @@ use std::collections::HashMap;
 use nav_data::NavigationData;
 
 pub use glam::Vec3;
+pub use rand;
 
 pub mod debug;
 

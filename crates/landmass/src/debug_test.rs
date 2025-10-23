@@ -92,7 +92,7 @@ fn draws_island_meshes_and_agents() {
     Some(Vec3::new(1.5, 4.5, 0.0) + TRANSLATION);
 
   // Update so everything is in sync.
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let mut fake_drawer = FakeDrawer::new();
   draw_archipelago_debug(&archipelago, &mut fake_drawer)
@@ -431,7 +431,7 @@ fn draws_boundary_links() {
   });
 
   // Update so everything is in sync.
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let mut fake_drawer = FakeDrawer::new();
   draw_archipelago_debug(&archipelago, &mut fake_drawer)
@@ -506,7 +506,7 @@ fn draws_animation_links() {
   });
 
   // Update so everything is in sync.
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let mut fake_drawer = FakeDrawer::new();
   draw_archipelago_debug(&archipelago, &mut fake_drawer)
@@ -598,7 +598,7 @@ fn draws_height_mesh() {
   archipelago.add_island(Island::new(Transform::default(), nav_mesh.clone()));
 
   // Update so everything is in sync.
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let mut fake_drawer = FakeDrawer::new();
   draw_archipelago_debug(&archipelago, &mut fake_drawer)
@@ -737,7 +737,7 @@ fn fails_to_draw_dirty_archipelago() {
     Err(DebugDrawError::NavDataDirty)
   );
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
   // Nav data is clean again.
   assert_eq!(draw_archipelago_debug(&archipelago, &mut fake_drawer), Ok(()));
 
@@ -811,7 +811,7 @@ fn draws_avoidance_data_when_requested() {
   });
 
   // We now have avoidance data for agent_1.
-  archipelago.update(/* delta_time= */ 1.0);
+  archipelago.update(&mut rand::thread_rng(),/* delta_time= */ 1.0);
 
   struct FakeAvoidanceDrawer(
     HashMap<AgentId, HashMap<ConstraintKind, Vec<ConstraintLine>>>,

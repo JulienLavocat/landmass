@@ -68,7 +68,7 @@ fn error_on_out_of_range() {
   );
 
   archipelago.add_island(Island::new(Transform::default(), nav_mesh));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   assert_eq!(
     sample_point(
@@ -107,7 +107,7 @@ fn samples_point_on_nav_mesh_or_near_nav_mesh() {
     Transform { translation: offset, rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   assert_eq!(
     sample_point(
@@ -179,7 +179,7 @@ fn samples_type_indices() {
     Transform { translation: offset, rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   assert_eq!(
     sample_point(
@@ -249,7 +249,7 @@ fn no_path() {
     Transform { translation: offset + Vec2::new(2.0, 0.0), rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = archipelago
     .sample_point(offset + Vec2::new(0.5, 0.5), &1e-5)
@@ -303,7 +303,7 @@ fn finds_path() {
     Transform { translation: offset + Vec2::new(2.0, 0.5), rotation: 0.0 },
     nav_mesh,
   ));
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = archipelago
     .sample_point(offset + Vec2::new(0.5, 0.5), &1e-5)
@@ -380,7 +380,7 @@ fn finds_path_with_override_type_index_costs() {
 
   archipelago.add_island(Island::new(Transform::default(), nav_mesh));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = sample_point(
     &archipelago,
@@ -438,7 +438,7 @@ fn find_path_returns_error_on_invalid_node_cost() {
 
   archipelago.add_island(Island::new(Transform::default(), nav_mesh));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = archipelago
     .sample_point(Vec2::new(0.25, 0.25), /* distance_to_node= */ &0.1)
@@ -492,7 +492,7 @@ fn start_and_end_in_same_node() {
 
   archipelago.add_island(Island::new(Transform::default(), nav_mesh));
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = Vec2::new(0.25, 0.25);
   let end_point = Vec2::new(0.75, 0.75);
@@ -558,7 +558,7 @@ fn one_animation_link_path() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let start_point = Vec2::new(0.25, 0.25);
   let end_point = Vec2::new(0.75, 2.75);

@@ -434,7 +434,7 @@ fn using_animation_link_does_not_reach_target() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(), 1.0);
 
   let off_mesh_link =
     off_mesh_link_for_animation_link(&archipelago, animation_link_id);

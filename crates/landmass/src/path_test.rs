@@ -371,7 +371,7 @@ fn straight_path_includes_animation_link() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let off_mesh_link =
     off_mesh_link_for_animation_link(&archipelago, animation_link_id);
@@ -511,7 +511,7 @@ fn multiple_animation_links_in_a_row() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let off_mesh_link_1 =
     off_mesh_link_for_animation_link(&archipelago, link_id_1);
@@ -660,7 +660,7 @@ fn obscured_animation_link_is_made_visible_by_straight_path() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let off_mesh_link = off_mesh_link_for_animation_link(&archipelago, link_id);
 
@@ -781,7 +781,7 @@ fn end_point_after_animation_link_is_reported() {
     bidirectional: false,
   });
 
-  archipelago.update(1.0);
+  archipelago.update(&mut rand::thread_rng(),1.0);
 
   let off_mesh_link_1 =
     off_mesh_link_for_animation_link(&archipelago, animation_link_1);

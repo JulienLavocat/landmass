@@ -363,7 +363,9 @@ fn update_archipelagos<CS: CoordinateSystem>(
   mut archipelago_query: Query<&mut Archipelago<CS>>,
 ) {
   for mut archipelago in archipelago_query.iter_mut() {
-    archipelago.archipelago.update(time.delta_secs());
+    archipelago
+      .archipelago
+      .update(&mut landmass::rand::thread_rng(), time.delta_secs());
   }
 }
 

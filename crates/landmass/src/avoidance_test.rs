@@ -826,7 +826,7 @@ fn reached_target_agent_has_different_avoidance() {
   // This is probably easy to break, but I couldn't think of another way to get
   // the right value here...
   for _ in 0..35 {
-    archipelago.update(0.1);
+    archipelago.update(&mut rand::thread_rng(),0.1);
     // Update the velocities to match the desired velocities.
     let agent_1 = archipelago.get_agent_mut(agent_1).unwrap();
     agent_1.velocity = *agent_1.get_desired_velocity();
@@ -915,7 +915,7 @@ fn switching_nav_mesh_to_fewer_vertices_does_not_result_in_panic() {
     agent
   });
 
-  archipelago.update(0.01);
+  archipelago.update(&mut rand::thread_rng(),0.01);
 
   // This doesn't really matter for the test, but ensures that pathing +
   // avoidance is running.
@@ -926,5 +926,5 @@ fn switching_nav_mesh_to_fewer_vertices_does_not_result_in_panic() {
 
   archipelago.get_island_mut(island_1).unwrap().set_nav_mesh(simplified_mesh);
 
-  archipelago.update(0.01);
+  archipelago.update(&mut rand::thread_rng(),0.01);
 }
