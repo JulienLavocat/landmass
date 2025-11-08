@@ -77,7 +77,7 @@ impl BoundingBox {
   }
 
   /// Returns whether the box is empty or not.
-  pub(crate) fn is_empty(&self) -> bool {
+  pub fn is_empty(&self) -> bool {
     matches!(self, Self::Empty)
   }
 
