@@ -483,27 +483,27 @@ impl<CS: CoordinateSystem> HeightNavigationMesh<CS> {
 pub struct ValidNavigationMesh<CS: CoordinateSystem> {
   /// The bounds of the mesh data itself. This is a tight bounding box around
   /// the vertices of the navigation mesh.
-  pub(crate) mesh_bounds: BoundingBox,
+  pub mesh_bounds: BoundingBox,
   /// The vertices that make up the polygons.
-  pub(crate) vertices: Vec<Vec3>,
+  pub vertices: Vec<Vec3>,
   /// The polygons of the mesh.
-  pub(crate) polygons: Vec<ValidPolygon>,
+  pub polygons: Vec<ValidPolygon>,
   /// The boundary edges in the navigation mesh. Edges are stored as pairs of
   /// vertices in a counter-clockwise direction. That is, moving along an edge
   /// (e.0, e.1) from e.0 to e.1 will move counter-clockwise along the
   /// boundary. The order of edges is undefined.
-  pub(crate) boundary_edges: Vec<MeshEdgeRef>,
+  pub boundary_edges: Vec<MeshEdgeRef>,
   /// The height mesh used to "refine" point positions. See
   /// [`HeightNavigationMesh`] for more details.
-  pub(crate) height_mesh: Option<ValidHeightNavigationMesh>,
+  pub height_mesh: Option<ValidHeightNavigationMesh>,
   /// Marker for the CoordinateSystem.
-  pub(crate) marker: PhantomData<CS>,
+  pub marker: PhantomData<CS>,
 }
 
 /// A version of [`HeightNavigationMesh`] after it has been validated and
 /// converted to the standard coordinate system.
 #[derive(Clone, Debug)]
-pub(crate) struct ValidHeightNavigationMesh {
+pub struct ValidHeightNavigationMesh {
   /// The list of height polygons that correspond to the original polygons.
   ///
   /// The length of this [`Vec`] must match the number of
@@ -551,44 +551,44 @@ impl<CS: CoordinateSystem> std::fmt::Debug for ValidNavigationMesh<CS> {
 /// A valid polygon. This means the polygon is convex and indexes the `vertices`
 /// Vec of the corresponding ValidNavigationMesh.
 #[derive(PartialEq, Debug, Clone)]
-pub(crate) struct ValidPolygon {
+pub struct ValidPolygon {
   /// The vertices are indexes to the `vertices` Vec of the corresponding
   /// ValidNavigationMesh.
-  pub(crate) vertices: Vec<usize>,
+  pub vertices: Vec<usize>,
   /// The connectivity of each edge in the polygon. This is the same length as
   /// the number of edges (which is equivalent to `self.vertices.len()`).
   /// Entries that are `None` correspond to the boundary of the navigation
   /// mesh, while `Some` entries are connected to another node.
-  pub(crate) connectivity: Vec<Option<Connectivity>>,
+  pub connectivity: Vec<Option<Connectivity>>,
   /// The "region" that this polygon belongs to. Each region is disjoint from
   /// every other. A "direct" path only exists if the region matches between
   /// two nodes. An "indirect" path exists if regions are joined together
   /// through boundary links.
-  pub(crate) region: usize,
+  pub region: usize,
   /// The "type" of this node. This is translated into a [`crate::NodeType`]
   /// once it is part of an island.
-  pub(crate) type_index: usize,
+  pub type_index: usize,
   /// The bounding box of `vertices`.
-  pub(crate) bounds: BoundingBox,
+  pub bounds: BoundingBox,
   /// The center of the polygon.
-  pub(crate) center: Vec3,
+  pub center: Vec3,
 }
 
 #[derive(PartialEq, Debug, Clone)]
-pub(crate) struct Connectivity {
+pub struct Connectivity {
   /// The index of the polygon that this edge leads to.
-  pub(crate) polygon_index: usize,
+  pub polygon_index: usize,
   /// The index of the edge that would take us back to the original node.
-  pub(crate) reverse_edge: usize,
+  pub reverse_edge: usize,
 }
 
 /// A reference to an edge on a navigation mesh.
 #[derive(PartialEq, Eq, Debug, Clone, Hash, Default)]
-pub(crate) struct MeshEdgeRef {
+pub struct MeshEdgeRef {
   /// The index of the polygon that this edge belongs to.
-  pub(crate) polygon_index: usize,
+  pub polygon_index: usize,
   /// The index of the edge within the polygon.
-  pub(crate) edge_index: usize,
+  pub edge_index: usize,
 }
 
 impl<CS: CoordinateSystem> ValidNavigationMesh<CS> {

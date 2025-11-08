@@ -56,7 +56,7 @@ impl Deref for FloatOrd {
 
 /// A bounding box.
 #[derive(PartialEq, Clone, Copy, Debug)]
-pub(crate) enum BoundingBox {
+pub enum BoundingBox {
   /// The bounding box has no points in it.
   Empty,
   /// The bounding box has some points in it.
