@@ -1,6 +1,7 @@
 use std::{cmp::Ordering, mem::swap, ops::Deref};
 
 use glam::{Quat, Vec3};
+use serde::{Deserialize, Serialize};
 
 use crate::CoordinateSystem;
 
@@ -55,7 +56,7 @@ impl Deref for FloatOrd {
 }
 
 /// A bounding box.
-#[derive(PartialEq, Clone, Copy, Debug)]
+#[derive(PartialEq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum BoundingBox {
   /// The bounding box has no points in it.
   Empty,

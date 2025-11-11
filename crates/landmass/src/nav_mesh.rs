@@ -7,6 +7,7 @@ use std::{
 
 use disjoint::DisjointSet;
 use glam::{Vec3, swizzles::Vec3Swizzles};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::{
@@ -71,7 +72,7 @@ pub struct HeightNavigationMesh<CS: CoordinateSystem> {
 ///
 /// While regular polygons are used for finding paths, this polygon is used to
 /// help determine which node a given point is on.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct HeightPolygon {
   /// The index of the first vertex in [`HeightNavigationMesh::vertices`] used
   /// by this polygon's triangles. The indices that make up a triangle are
@@ -480,6 +481,7 @@ impl<CS: CoordinateSystem> HeightNavigationMesh<CS> {
 
 /// A navigation mesh which has been validated and derived data has been
 /// computed.
+#[derive(Serialize, Deserialize)]
 pub struct ValidNavigationMesh<CS: CoordinateSystem> {
   /// The bounds of the mesh data itself. This is a tight bounding box around
   /// the vertices of the navigation mesh.
@@ -502,7 +504,7 @@ pub struct ValidNavigationMesh<CS: CoordinateSystem> {
 
 /// A version of [`HeightNavigationMesh`] after it has been validated and
 /// converted to the standard coordinate system.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ValidHeightNavigationMesh {
   /// The list of height polygons that correspond to the original polygons.
   ///
@@ -550,7 +552,7 @@ impl<CS: CoordinateSystem> std::fmt::Debug for ValidNavigationMesh<CS> {
 
 /// A valid polygon. This means the polygon is convex and indexes the `vertices`
 /// Vec of the corresponding ValidNavigationMesh.
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct ValidPolygon {
   /// The vertices are indexes to the `vertices` Vec of the corresponding
   /// ValidNavigationMesh.
@@ -574,7 +576,7 @@ pub struct ValidPolygon {
   pub center: Vec3,
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Connectivity {
   /// The index of the polygon that this edge leads to.
   pub polygon_index: usize,
@@ -583,7 +585,9 @@ pub struct Connectivity {
 }
 
 /// A reference to an edge on a navigation mesh.
-#[derive(PartialEq, Eq, Debug, Clone, Hash, Default)]
+#[derive(
+  PartialEq, Eq, Debug, Clone, Hash, Default, Serialize, Deserialize,
+)]
 pub struct MeshEdgeRef {
   /// The index of the polygon that this edge belongs to.
   pub polygon_index: usize,

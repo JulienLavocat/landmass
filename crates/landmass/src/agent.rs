@@ -84,6 +84,8 @@ pub struct Agent<CS: CoordinateSystem> {
   /// it can reuse that path if it is still valid and relevant (the agent still
   /// wants to go to the same place).
   pub paused: bool,
+  /// The state of the agent.
+  pub state: AgentState,
   #[cfg(feature = "debug-avoidance")]
   /// If true, avoidance debug data will be stored during update iterations.
   /// This can later be used for visualization.
@@ -93,10 +95,9 @@ pub struct Agent<CS: CoordinateSystem> {
   /// The current path of the agent. None if a path is unavailable or a new
   /// path has not been computed yet (i.e., no path).
   pub(crate) current_path: Option<Path>,
+
   /// The desired velocity of the agent to move towards its goal.
   pub(crate) current_desired_move: CS::Coordinate,
-  /// The state of the agent.
-  pub(crate) state: AgentState,
   /// The animation link that the agent has reached. This includes the
   /// animation link, and the off mesh link being used.
   pub(crate) current_animation_link: Option<ReachedAnimationLink<CS>>,

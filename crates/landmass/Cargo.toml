@@ -14,14 +14,17 @@ categories = ["game-development"]
 keywords = ["navigation", "system", "pathfinding", "avoidance"]
 
 [dependencies]
-dodgy_2d = { git = "https://github.com/JulienLavocat/dodgy", branch = "main" }
-glam = "0.30.5"
+dodgy_2d = { git = "https://github.com/JulienLavocat/dodgy", rev = "a3c36fb9f5c5b70f8eb3c4439be25600a974deea" }
+disjoint = "0.8.0"
+glam = { version = "0.30.5", features = ["serde"] }
 kdtree = "0.7.0"
 geo = "0.31.0"
-disjoint = "0.8.0"
-slotmap = "1.0.7"
+slotmap = { version = "1.0.7", features = ["serde"] }
 thiserror = "2.0"
 rand = "0.8.5"
+serde = { version = "1.0.228", features = ["derive", "std", "rc"] }
+bincode = { version = "2.0.1", features = ["derive"] }
+log = "0.4.28"
 
 [dev-dependencies]
 googletest = "0.14.2"

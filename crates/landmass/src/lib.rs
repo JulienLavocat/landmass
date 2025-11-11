@@ -18,6 +18,7 @@ mod util;
 use agent::{RepathResult, does_agent_need_repath};
 use glam::Vec3Swizzles;
 use path::PathIndex;
+use serde::{Deserialize, Serialize};
 use slotmap::HopSlotMap;
 use std::collections::HashMap;
 
@@ -41,11 +42,13 @@ pub use island::{Island, IslandId};
 pub use link::{AnimationLink, AnimationLinkId};
 pub use nav_data::{IslandMut, SetTypeIndexCostError};
 pub use nav_mesh::{
-  HeightNavigationMesh, HeightPolygon, NavigationMesh, ValidNavigationMesh,
+  Connectivity, HeightNavigationMesh, HeightPolygon, MeshEdgeRef,
+  NavigationMesh, ValidHeightNavigationMesh, ValidNavigationMesh, ValidPolygon,
   ValidationError,
 };
+pub use path::Path;
 pub use query::{FindPathError, PathStep, SamplePointError, SampledPoint};
-pub use util::Transform;
+pub use util::{BoundingBox, Transform};
 
 use crate::{
   avoidance::apply_avoidance_to_agents, coords::CorePointSampleDistance,
@@ -61,6 +64,7 @@ pub struct Archipelago<CS: CoordinateSystem> {
 }
 
 /// Options that apply to the entire archipelago.
+#[derive(Serialize, Deserialize)]
 pub struct ArchipelagoOptions<CS: CoordinateSystem> {
   /// The options for sampling agent and target points.
   pub point_sample_distance: CS::SampleDistance,
@@ -125,6 +129,12 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
 
   pub fn get_agent_ids(&self) -> impl ExactSizeIterator<Item = AgentId> + '_ {
     self.agents.keys()
+  }
+
+  pub fn get_agents(
+    &mut self,
+  ) -> impl ExactSizeIterator<Item = (AgentId, &Agent<CS>)> + '_ {
+    self.agents.iter()
   }
 
   pub fn add_character(&mut self, character: Character<CS>) -> CharacterId {
@@ -360,6 +370,7 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
       }
       let agent_point_and_node = agent_id_to_agent_node.get(&agent_id);
       let target_point_and_node = agent_id_to_target_node.get(&agent_id);
+
       match does_agent_need_repath(
         agent,
         agent_point_and_node.map(|(_, node)| *node),
@@ -367,11 +378,14 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
         &invalidated_off_mesh_links,
         &invalidated_islands,
       ) {
-        RepathResult::DoNothing => {}
+        RepathResult::DoNothing => {
+          log::debug!("No repath needed for agent {:?}", agent_id);
+        }
         RepathResult::FollowPath(
           agent_node_in_corridor,
           target_node_in_corridor,
         ) => {
+          log::debug!("Following existing path for agent {:?}", agent_id);
           agent_id_to_follow_path_indices.insert(
             agent_id,
             (agent_node_in_corridor, target_node_in_corridor),
@@ -380,16 +394,26 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
         RepathResult::ClearPathNoTarget => {
           agent.state = AgentState::Idle;
           agent.current_path = None;
+          log::debug!("Clearing path for agent {:?} with no target", agent_id);
         }
         RepathResult::ClearPathBadAgent => {
           agent.state = AgentState::AgentNotOnNavMesh;
           agent.current_path = None;
+          log::debug!(
+            "Clearing path for agent {:?} with bad agent position",
+            agent_id
+          );
         }
         RepathResult::ClearPathBadTarget => {
           agent.state = AgentState::TargetNotOnNavMesh;
           agent.current_path = None;
+          log::debug!(
+            "Clearing path for agent {:?} with bad target position",
+            agent_id
+          );
         }
         RepathResult::NeedsRepath => {
+          log::debug!("Repathing agent {:?}", agent_id);
           agent.current_path = None;
 
           let (agent_point, agent_node) = agent_point_and_node.unwrap();
@@ -537,7 +561,7 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
 }
 
 /// The result of path finding.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PathingResult {
   /// The agent that searched for the path.
   pub agent: AgentId,
