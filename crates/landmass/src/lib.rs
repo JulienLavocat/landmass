@@ -378,14 +378,11 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
         &invalidated_off_mesh_links,
         &invalidated_islands,
       ) {
-        RepathResult::DoNothing => {
-          log::debug!("No repath needed for agent {:?}", agent_id);
-        }
+        RepathResult::DoNothing => {}
         RepathResult::FollowPath(
           agent_node_in_corridor,
           target_node_in_corridor,
         ) => {
-          log::debug!("Following existing path for agent {:?}", agent_id);
           agent_id_to_follow_path_indices.insert(
             agent_id,
             (agent_node_in_corridor, target_node_in_corridor),
@@ -394,26 +391,16 @@ impl<CS: CoordinateSystem> Archipelago<CS> {
         RepathResult::ClearPathNoTarget => {
           agent.state = AgentState::Idle;
           agent.current_path = None;
-          log::debug!("Clearing path for agent {:?} with no target", agent_id);
         }
         RepathResult::ClearPathBadAgent => {
           agent.state = AgentState::AgentNotOnNavMesh;
           agent.current_path = None;
-          log::debug!(
-            "Clearing path for agent {:?} with bad agent position",
-            agent_id
-          );
         }
         RepathResult::ClearPathBadTarget => {
           agent.state = AgentState::TargetNotOnNavMesh;
           agent.current_path = None;
-          log::debug!(
-            "Clearing path for agent {:?} with bad target position",
-            agent_id
-          );
         }
         RepathResult::NeedsRepath => {
-          log::debug!("Repathing agent {:?}", agent_id);
           agent.current_path = None;
 
           let (agent_point, agent_node) = agent_point_and_node.unwrap();
